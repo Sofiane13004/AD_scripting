@@ -8,74 +8,76 @@ Installation des rôles : Active Directory Domain Services, DNS, et DHCP.
 
 Promotion du serveur en contrôleur de domaine (infra.lan).
 
-Création automatique de groupes AD :
+Comment utiliser le script PowerShell
+Prérequis
+Avant de lancer ton script :
 
-Développement
+Tu dois être sur un serveur Windows récent (Windows Server 2016/2019/2022).
 
-Finance
+Tu dois avoir des droits administrateur sur ce serveur.
 
-Ressources Humaines (RH)
+Le serveur doit déjà avoir une adresse IP fixe (ex: 192.168.1.1).
 
-Administrateurs
+Le serveur doit pouvoir redémarrer automatiquement (puisque ton script le force).
 
-Création automatique d'utilisateurs :
+Étapes pour lancer ton script
+1. Ouvrir PowerShell en mode administrateur
+Clique droit sur l'icône PowerShell → Exécuter en tant qu'administrateur.
 
-John Doe (Développement)
+2. Changer la politique d'exécution si nécessaire
+Si PowerShell bloque ton script à cause de la sécurité, tape ceci pour autoriser l'exécution temporairement :
 
-Jane Doe (Finance)
+powershell
+Copier
+Modifier
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+Cela te permet de lancer ton script sans modifier la sécurité globale du serveur.
 
-Admin User (Administrateurs)
+3. Lancer le script
+Place ton script dans un fichier, par exemple setup_infra.ps1.
 
-Configuration du serveur DHCP avec :
+Dans PowerShell, navigue jusqu'au dossier où est ton fichier, par exemple :
 
-Une plage d'adresses IP de 192.168.1.100 à 192.168.1.200.
+powershell
+Copier
+Modifier
+cd C:\Chemin\Vers\Ton\Script
+Puis lance ton script :
 
-Exclusion de l'adresse IP du serveur 192.168.1.1.
+powershell
+Copier
+Modifier
+.\setup_infra.ps1
+Ce qu'il va se passer automatiquement
+Le script installe Active Directory, DNS et DHCP.
 
-Détail des étapes
-1. Installation des rôles Windows
-Utilisation de Install-WindowsFeature pour installer :
+Il promeut ton serveur comme contrôleur de domaine pour infra.lan.
 
-AD DS (Active Directory Domain Services)
+Il redémarre le serveur pour appliquer les changements.
 
-DNS
+Après redémarrage, il vérifie que ton serveur est bien contrôleur de domaine.
 
-DHCP
+Il crée les groupes AD (Développement, Finance, RH, Administrateurs).
 
-Avec les outils de gestion associés.
+Il crée les utilisateurs (John Doe, Jane Doe, Admin User) et les ajoute aux bons groupes.
 
-2. Promotion du serveur en contrôleur de domaine
-Création d'une nouvelle forêt avec infra.lan comme nom de domaine.
+Il démarre et configure le serveur DHCP pour ton réseau.
 
-Installation du service DNS intégré.
+Infos supplémentaires
+Le redémarrage interrompt le script : tu dois relancer manuellement le script après redémarrage, mais il va vérifier tout seul si le serveur est déjà contrôleur de domaine, et continuer la configuration.
 
-Définition du mot de passe pour le mode de restauration des services d'annuaire.
+Important : Quand tu relances, tu n’as pas besoin de refaire les installations, le script saute directement aux créations des utilisateurs, groupes, DHCP, etc.
 
-3. Redémarrage du serveur
-Le serveur redémarre pour finaliser la promotion.
+Résultat final
+À la fin :
 
-Vérification que le serveur appartient bien au domaine infra.lan.
+Ton domaine infra.lan est fonctionnel.
 
-4. Création des groupes Active Directory
-Chaque groupe est créé dans le conteneur Users du domaine.
+Ton serveur est un contrôleur de domaine, DNS et DHCP.
 
-5. Création des utilisateurs
-Chaque utilisateur est créé avec un mot de passe qui n'expire jamais.
+Tu as des groupes et des utilisateurs prêts.
 
-Chaque utilisateur est automatiquement ajouté à son groupe respectif.
+Ton DHCP attribue les IPs entre 192.168.1.100 et 192.168.1.200.
 
-6. Configuration du service DHCP
-Démarrage du service DHCP.
 
-Ajout du serveur DHCP dans Active Directory.
 
-Création d'une plage DHCP active.
-
-Définition d'une exclusion pour l'adresse IP principale du serveur.
-
-Remarques importantes
-Mot de passe : Actuellement en clair dans le script (MotDePasseAdmin123!), il est recommandé de le sécuriser autrement pour une utilisation en production.
-
-Adresse IP : Le serveur est supposé avoir l'IP 192.168.1.1.
-
-Exécution : Ce script doit être exécuté avec des droits administrateur.
