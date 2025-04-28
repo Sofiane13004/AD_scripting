@@ -1,6 +1,6 @@
 Script de Déploiement d'un Contrôleur de Domaine avec AD, DNS et DHCP
 Description
-Ce script PowerShell automatise l'installation et la configuration d'un serveur Windows en tant que contrôleur de domaine pour un nouveau domaine infra.lan.
+Ce script PowerShell automatise l'installation et la configuration d'un serveur Windows en tant que contrôleur de domaine pour un nouveau domaine par exemple : infra.lan.
 Il installe également les services DNS et DHCP, crée des groupes et utilisateurs Active Directory, puis configure une plage DHCP.
 
 Fonctionnalités
